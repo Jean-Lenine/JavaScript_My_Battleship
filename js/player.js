@@ -4,7 +4,7 @@
 (function (global) {
     "use strict";
 
-    var sheep = {dom: {parentNode: {removeChild: function () {}}}};
+    var ship = {dom: {parentNode: {removeChild: function () {}}}};
 
     var player = {
         grid: [],
@@ -52,8 +52,8 @@
         },
         clearPreview: function () {
             this.fleet.forEach(function (ship) {
-                if (sheep.dom.parentNode) {
-                    sheep.dom.parentNode.removeChild(ship.dom);
+                if (ship.dom.parentNode) {
+                    ship.dom.parentNode.removeChild(ship.dom);
                 }
             });
         },
@@ -86,9 +86,9 @@
         },
         renderShips: function (grid) {
         },
-        setGame: function(game) {
+        setGame:function(game){
             this.game = game;
-        },
+        }
     };
 
     global.player = player;
