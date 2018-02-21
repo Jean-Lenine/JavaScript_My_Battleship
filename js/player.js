@@ -22,7 +22,7 @@
             // créé les grilles
             this.grid = utils.createGrid(10, 10);
             this.tries = utils.createGrid(10, 10);
-        },
+        },  
         play: function (col, line) {
             // appel la fonction fire du game, et lui passe une calback pour récupérer le résultat du tir
             this.game.fire(this, col, line, _.bind(function (hasSucced) {
@@ -42,13 +42,21 @@
         setActiveShipPosition: function (x, y) {
             var ship = this.fleet[this.activeShip];
             var i = 0;
-
+            // décale le curseur
+            x = x - Math.floor(ship.getLife()/2);
+            var j = 0;
+            // j récupère la vie du bateau & check si la case est pleine
+            while(j < ship.getLife()) {
+                if(this.grid[y][x + j] != 0){
+                    return false;
+                }
+                j += 1;
+            }
             while (i < ship.getLife()) {
                 this.grid[y][x + i] = ship.getId();
                 i += 1;
-            }
-
-            return true;
+                }
+                return true;
         },
         clearPreview: function () {
             this.fleet.forEach(function (ship) {
@@ -84,10 +92,18 @@
                 });
             });
         },
-        renderShips: function (grid) {
+
+        renderShips: function (grid, minigrid) {
+            grid.forEach( function (ship) {
+            minigrid.innerHTML += ship.dom.outerHTML;
+        });
         },
+
         setGame:function(game){
             this.game = game;
+        },
+        isShipOk: function(){
+            
         }
     };
 

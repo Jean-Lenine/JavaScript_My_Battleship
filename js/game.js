@@ -32,7 +32,7 @@
 
             // initialisation
             this.grid = document.querySelector('.board .main-grid');
-            this.miniGrid = document.querySelector('.board .mini-grid');
+            this.miniGrid = document.querySelector('.mini-grid');
 
             // défini l'ordre des phase de jeu
             this.phaseOrder = [
@@ -217,8 +217,11 @@
         renderMap: function () {
             this.players[0].renderTries(this.grid);
         },
+
         renderMiniMap: function () {
-        }
+            var minigrid = this.miniGrid;
+            this.players[0].renderShips(this.players[0].fleet, minigrid);
+        },
     };
 
     // point d'entrée

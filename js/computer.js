@@ -17,7 +17,7 @@
                 });
             }, 2000);
         },
-        areShipsOk: function (callback) {
+        isShipsOk: function (callback) {
             var i = 0;
             var j;
 
