@@ -102,9 +102,6 @@
         setGame:function(game){
             this.game = game;
         },
-        isShipOk: function(){
-            
-        }
     };
 
     global.player = player;
