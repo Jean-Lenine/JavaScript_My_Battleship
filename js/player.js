@@ -97,6 +97,7 @@
             grid.forEach( function (ship) {
             minigrid.innerHTML += ship.dom.outerHTML;
         });
+        
         },
 
         setGame:function(game){
