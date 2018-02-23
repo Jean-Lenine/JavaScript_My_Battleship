@@ -24,6 +24,9 @@
         grid: null,
         miniGrid: null,
 
+        //axe
+        axe: "Horizontale",
+
         // liste des joueurs
         players: [],
 
@@ -68,7 +71,6 @@
             // récupération du numéro d'index de la phase courante
             var ci = this.phaseOrder.indexOf(this.currentPhase);
             var self = this;
-
             if (ci !== this.phaseOrder.length - 1) {
                 this.currentPhase = this.phaseOrder[ci + 1];
             } else {
@@ -126,6 +128,20 @@
             this.grid.addEventListener('click', _.bind(this.handleClick, this));
             this.grid.addEventListener('contextmenu', _.bind(this.handleRightClick, this));
         },
+         handleRightClick:function(e){
+            if(this.getPhase() === this.PHASE_INIT_PLAYER){
+                e.preventDefault();
+                var ship = this.players[0].fleet[this.players[0].activeShip];
+                 if(this.axe === "Horizontale"){
+                     this.axe = "Verticale";
+                     ship.dom.style.transform = "rotate(90deg)";
+                 }else{
+                     this.axe = "Horizontale";
+                     ship.dom.style.transform = "rotate(180deg)";
+                }
+                    this.handleMouseMove(e);
+                    }
+                },
         handleMouseMove: function (e) {
             // on est dans la phase de placement des bateau
             if (this.getPhase() === this.PHASE_INIT_PLAYER && e.target.classList.contains('cell')) {
@@ -139,12 +155,16 @@
                 }
 
                 // décalage visuelle, le point d'ancrage du curseur est au milieu du bateau
-                ship.dom.style.top = "" + (utils.eq(e.target.parentNode)) * utils.CELL_SIZE - (600 + this.players[0].activeShip * 60) + "px";
-                ship.dom.style.left = "" + utils.eq(e.target) * utils.CELL_SIZE - Math.floor(ship.getLife() / 2) * utils.CELL_SIZE + "px";
+                if(((ship.life)%2) === 0 && this.axe === 'Verticale') {
+                    // console.log('e');
+                    ship.dom.style.top = "" + (utils.eq(e.target.parentNode)) * utils.CELL_SIZE - (600 + (this.players[0].activeShip) * 60) - 30 + "px";
+                    ship.dom.style.left = "" + utils.eq(e.target) * utils.CELL_SIZE - Math.floor(ship.getLife() / 2) * utils.CELL_SIZE + 30 + "px";
+                }
+                else {
+                    ship.dom.style.top = "" + (utils.eq(e.target.parentNode)) * utils.CELL_SIZE - (600 + (this.players[0].activeShip) * 60) + "px";
+                    ship.dom.style.left = "" + utils.eq(e.target) * utils.CELL_SIZE - Math.floor(ship.getLife() / 2) * utils.CELL_SIZE + "px";
+                }
             }
-        },
-        handleRightClick:function(e){
-            e.preventDefault();
         },
         handleClick: function (e) {
             // self garde une référence vers "this" en cas de changement de scope
@@ -156,6 +176,7 @@
                 if (this.getPhase() === this.PHASE_INIT_PLAYER) {
                     // on enregistre la position du bateau, si cela se passe bien (la fonction renvoie true) on continue
                     if (this.players[0].setActiveShipPosition(utils.eq(e.target), utils.eq(e.target.parentNode))) {
+                        this.axe = "Horizontale";
                         // et on passe au bateau suivant (si il n'y en plus la fonction retournera false)
                         if (!this.players[0].activateNextShip()) {
                             this.wait();
