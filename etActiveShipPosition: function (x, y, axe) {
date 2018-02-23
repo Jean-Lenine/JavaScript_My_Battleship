@@ -1,0 +1,372 @@
+[1mdiff --git a/etActiveShipPosition: function (x, y) { b/etActiveShipPosition: function (x, y) {[m
+[1mdeleted file mode 100644[m
+[1mindex 1b883c1..0000000[m
+[1m--- a/etActiveShipPosition: function (x, y) {[m	
+[1m+++ /dev/null[m
+[36m@@ -1,127 +0,0 @@[m
+[31m-[1mdiff --git a/css/main.css b/css/main.css[m[m
+[31m-[1mindex 68869bf..1e3e4a5 100644[m[m
+[31m-[1m--- a/css/main.css[m[m
+[31m-[1m+++ b/css/main.css[m[m
+[31m-[36m@@ -1,3 +1,7 @@[m[m
+[31m-[32m+[m[32mbody{[m[m
+[31m-[32m+[m[32mbackground-color: darkgray;[m[m
+[31m-[32m+[m[32mfont-family: "Roboto";[m[41m    [m[m
+[31m-[32m+[m[32m}[m[m
+[31m- .main-container {[m[m
+[31m-     width: 980px;[m[m
+[31m-     margin:auto;[m[m
+[31m-[36m@@ -63,6 +67,7 @@[m[m
+[31m-     margin-top: -150px;[m[m
+[31m- }[m[m
+[31m- [m[m
+[31m-[32m+[m[m
+[31m- .game-info {[m[m
+[31m-     overflow: auto;[m[m
+[31m-     width: 100%;[m[m
+[31m-[36m@@ -86,7 +91,7 @@[m[m
+[31m-     border-radius: 5px;[m[m
+[31m-     display: inline-block;[m[m
+[31m-     text-align: center;[m[m
+[31m-[31m-    padding-top: 10px;[m[m
+[31m-[32m+[m[32m    /* padding-top: 10px; */[m[m
+[31m-     color: white;[m[m
+[31m-     cursor: pointer;[m[m
+[31m- }[m[m
+[31m-[1mdiff --git a/js/computer.js b/js/computer.js[m[m
+[31m-[1mindex ad266a9..13204f3 100755[m[m
+[31m-[1m--- a/js/computer.js[m[m
+[31m-[1m+++ b/js/computer.js[m[m
+[31m-[36m@@ -17,7 +17,7 @@[m[m
+[31m-                 });[m[m
+[31m-             }, 2000);[m[m
+[31m-         },[m[m
+[31m-[31m-        areShipsOk: function (callback) {[m[m
+[31m-[32m+[m[32m        isShipsOk: function (callback) {[m[m
+[31m-             var i = 0;[m[m
+[31m-             var j;[m[m
+[31m- [m[m
+[31m-[1mdiff --git a/js/game.js b/js/game.js[m[m
+[31m-[1mindex da5aecd..0cda493 100755[m[m
+[31m-[1m--- a/js/game.js[m[m
+[31m-[1m+++ b/js/game.js[m[m
+[31m-[36m@@ -32,7 +32,7 @@[m[m
+[31m- [m[m
+[31m-             // initialisation[m[m
+[31m-             this.grid = document.querySelector('.board .main-grid');[m[m
+[31m-[31m-            this.miniGrid = document.querySelector('.board .mini-grid');[m[m
+[31m-[32m+[m[32m            this.miniGrid = document.querySelector('.mini-grid');[m[m
+[31m- [m[m
+[31m-             // défini l'ordre des phase de jeu[m[m
+[31m-             this.phaseOrder = [[m[m
+[31m-[36m@@ -217,8 +217,11 @@[m[m
+[31m-         renderMap: function () {[m[m
+[31m-             this.players[0].renderTries(this.grid);[m[m
+[31m-         },[m[m
+[31m-[32m+[m[m
+[31m-         renderMiniMap: function () {[m[m
+[31m-[31m-        }[m[m
+[31m-[32m+[m[32m            var minigrid = this.miniGrid;[m[m
+[31m-[32m+[m[32m            this.players[0].renderShips(this.players[0].fleet, minigrid);[m[m
+[31m-[32m+[m[32m        },[m[m
+[31m-     };[m[m
+[31m- [m[m
+[31m-     // point d'entrée[m[m
+[31m-[1mdiff --git a/js/player.js b/js/player.js[m[m
+[31m-[1mindex cd455f4..2eb54e7 100755[m[m
+[31m-[1m--- a/js/player.js[m[m
+[31m-[1m+++ b/js/player.js[m[m
+[31m-[36m@@ -22,7 +22,7 @@[m[m
+[31m-             // créé les grilles[m[m
+[31m-             this.grid = utils.createGrid(10, 10);[m[m
+[31m-             this.tries = utils.createGrid(10, 10);[m[m
+[31m-[31m-        },[m[m
+[31m-[32m+[m[32m        },[m[41m  [m[m
+[31m-         play: function (col, line) {[m[m
+[31m-             // appel la fonction fire du game, et lui passe une calback pour récupérer le résultat du tir[m[m
+[31m-             this.game.fire(this, col, line, _.bind(function (hasSucced) {[m[m
+[31m-[36m@@ -42,13 +42,21 @@[m[m
+[31m-         setActiveShipPosition: function (x, y) {[m[m
+[31m-             var ship = this.fleet[this.activeShip];[m[m
+[31m-             var i = 0;[m[m
+[31m-[31m-[m[m
+[31m-[32m+[m[32m            // décale le curseur[m[m
+[31m-[32m+[m[32m            x = x - Math.floor(ship.getLife()/2);[m[m
+[31m-[32m+[m[32m            var j = 0;[m[m
+[31m-[32m+[m[32m            // j récupère la vie du bateau & check si la case est pleine[m[m
+[31m-[32m+[m[32m            while(j < ship.getLife()) {[m[m
+[31m-[32m+[m[32m                if(this.grid[y][x + j] != 0){[m[m
+[31m-[32m+[m[32m                    return false;[m[m
+[31m-[32m+[m[32m                }[m[m
+[31m-[32m+[m[32m                j += 1;[m[m
+[31m-[32m+[m[32m            }[m[m
+[31m-             while (i < ship.getLife()) {[m[m
+[31m-                 this.grid[y][x + i] = ship.getId();[m[m
+[31m-                 i += 1;[m[m
+[31m-[31m-            }[m[m
+[31m-[31m-[m[m
+[31m-[31m-            return true;[m[m
+[31m-[32m+[m[32m                }[m[m
+[31m-[32m+[m[32m                return true;[m[m
+[31m-         },[m[m
+[31m-         clearPreview: function () {[m[m
+[31m-             this.fleet.forEach(function (ship) {[m[m
+[31m-[36m@@ -84,10 +92,18 @@[m[m
+[31m-                 });[m[m
+[31m-             });[m[m
+[31m-         },[m[m
+[31m-[31m-        renderShips: function (grid) {[m[m
+[31m-[32m+[m[m
+[31m-[32m+[m[32m        renderShips: function (grid, minigrid) {[m[m
+[31m-[32m+[m[32m            grid.forEach( function (ship) {[m[m
+[31m-[32m+[m[32m            minigrid.innerHTML += ship.dom.outerHTML;[m[m
+[31m-[32m+[m[32m        });[m[m
+[31m-         },[m[m
+[31m-[32m+[m[m
+[31m-         setGame:function(game){[m[m
+[31m-             this.game = game;[m[m
+[31m-[32m+[m[32m        },[m[m
+[31m-[32m+[m[32m        isShipOk: function(){[m[m
+[31m-[32m+[m[41m            [m[m
+[31m-         }[m[m
+[31m-     };[m[m
+[31m- [m[m
+[1mdiff --git a/hip.getLife()) { b/hip.getLife()) {[m
+[1mdeleted file mode 100644[m
+[1mindex 2a8e3e7..0000000[m
+[1m--- a/hip.getLife()) {[m	
+[1m+++ /dev/null[m
+[36m@@ -1,233 +0,0 @@[m
+[31m-[m
+[31m-                   SSUUMMMMAARRYY OOFF LLEESSSS CCOOMMMMAANNDDSS[m
+[31m-[m
+[31m-      Commands marked with * may be preceded by a number, _N.[m
+[31m-      Notes in parentheses indicate the behavior if _N is given.[m
+[31m-      A key preceded by a caret indicates the Ctrl key; thus ^K is ctrl-K.[m
+[31m-[m
+[31m-  h  H                 Display this help.[m
+[31m-  q  :q  Q  :Q  ZZ     Exit.[m
+[31m- ---------------------------------------------------------------------------[m
+[31m-[m
+[31m-                           MMOOVVIINNGG[m
+[31m-[m
+[31m-  e  ^E  j  ^N  CR  *  Forward  one line   (or _N lines).[m
+[31m-  y  ^Y  k  ^K  ^P  *  Backward one line   (or _N lines).[m
+[31m-  f  ^F  ^V  SPACE  *  Forward  one window (or _N lines).[m
+[31m-  b  ^B  ESC-v      *  Backward one window (or _N lines).[m
+[31m-  z                 *  Forward  one window (and set window to _N).[m
+[31m-  w                 *  Backward one window (and set window to _N).[m
+[31m-  ESC-SPACE         *  Forward  one window, but don't stop at end-of-file.[m
+[31m-  d  ^D             *  Forward  one half-window (and set half-window to _N).[m
+[31m-  u  ^U             *  Backward one half-window (and set half-window to _N).[m
+[31m-  ESC-)  RightArrow *  Left  one half screen width (or _N positions).[m
+[31m-  ESC-(  LeftArrow  *  Right one half screen width (or _N positions).[m
+[31m-  F                    Forward forever; like "tail -f".[m
+[31m-  ESC-F                Like F but stop when search pattern is found.[m
+[31m-  r  ^R  ^L            Repaint screen.[m
+[31m-  R                    Repaint screen, discarding buffered input.[m
+[31m-        ---------------------------------------------------[m
+[31m-        Default "window" is the screen height.[m
+[31m-        Default "half-window" is half of the screen height.[m
+[31m- ---------------------------------------------------------------------------[m
+[31m-[m
+[31m-                          SSEEAARRCCHHIINNGG[m
+[31m-[m
+[31m-  /_p_a_t_t_e_r_n          *  Search forward for (_N-th) matching line.[m
+[31m-  ?_p_a_t_t_e_r_n          *  Search backward for (_N-th) matching line.[m
+[31m-  n                 *  Repeat previous search (for _N-th occurrence).[m
+[31m-  N                 *  Repeat previous search in reverse direction.[m
+[31m-  ESC-n             *  Repeat previous search, spanning files.[m
+[31m-  ESC-N             *  Repeat previous search, reverse dir. & spanning files.[m
+[31m-  ESC-u                Undo (toggle) search highlighting.[m
+[31m-  &_p_a_t_t_e_r_n          *  Display only matching lines[m
+[31m-        ---------------------------------------------------[m
+[31m-        A search pattern may be preceded by one or more of:[m
+[31m-        ^N or !  Search for NON-matching lines.[m
+[31m-        ^E or *  Search multiple files (pass thru END OF FILE).[m
+[31m-        ^F or @  Start search at FIRST file (for /) or last file (for ?).[m
+[31m-        ^K       Highlight matches, but don't move (KEEP position).[m
+[31m-        ^R       Don't use REGULAR EXPRESSIONS.[m
+[31m- ---------------------------------------------------------------------------[m
+[31m-[m
+[31m-                           JJUUMMPPIINNGG[m
+[31m-[m
+[31m-  g  <  ESC-<       *  Go to first line in file (or line _N).[m
+[31m-  G  >  ESC->       *  Go to last line in file (or line _N).[m
+[31m-  p  %              *  Go to beginning of file (or _N percent into file).[m
+[31m-  t                 *  Go to the (_N-th) next tag.[m
+[31m-  T                 *  Go to the (_N-th) previous tag.[m
+[31m-  {  (  [           *  Find close bracket } ) ].[m
+[31m-  }  )  ]           *  Find open bracket { ( [.[m
+[31m-  ESC-^F _<_c_1_> _<_c_2_>  *  Find close bracket _<_c_2_>.[m
+[31m-  ESC-^B _<_c_1_> _<_c_2_>  *  Find open bracket _<_c_1_> [m
+[31m-        ---------------------------------------------------[m
+[31m-        Each "find close bracket" command goes forward to the close bracket [m
+[31m-          matching the (_N-th) open bracket in the top line.[m
+[31m-        Each "find open bracket" command goes backward to the open bracket [m
+[31m-          matching the (_N-th) close bracket in the bottom line.[m
+[31m-[m
+[31m-  m_<_l_e_t_t_e_r_>            Mark the current position with <letter>.[m
+[31m-  '_<_l_e_t_t_e_r_>            Go to a previously marked position.[m
+[31m-  ''                   Go to the previous position.[m
+[31m-  ^X^X                 Same as '.[m
+[31m-        ---------------------------------------------------[m
+[31m-        A mark is any upper-case or lower-case letter.[m
+[31m-        Certain marks are predefined:[m
+[31m-             ^  means  beginning of the file[m
+[31m-             $  means  end of the file[m
+[31m- ---------------------------------------------------------------------------[m
+[31m-[m
+[31m-                        CCHHAANNGGIINNGG FFIILLEESS[m
+[31m-[m
+[31m-  :e [_f_i_l_e]            Examine a new file.[m
+[31m-  ^X^V                 Same as :e.[m
+[31m-  :n                *  Examine the (_N-th) next file from the command line.[m
+[31m-  :p                *  Examine the (_N-th) previous file from the command line.[m
+[31m-  :x                *  Examine the first (or _N-th) file from the command line.[m
+[31m-  :d                   Delete the current file from the command line list.[m
+[31m-  =  ^G  :f            Print current file name.[m
+[31m- ---------------------------------------------------------------------------[m
+[31m-[m
+[31m-                    MMIISSCCEELLLLAANNEEOOUUSS CCOOMMMMAANNDDSS[m
+[31m-[m
+[31m-  -_<_f_l_a_g_>              Toggle a command line option [see OPTIONS below].[m
+[31m-  --_<_n_a_m_e_>             Toggle a command line option, by name.[m
+[31m-  __<_f_l_a_g_>              Display the setting of a command line option.[m
+[31m-  ___<_n_a_m_e_>             Display the setting of an option, by name.[m
+[31m-  +_c_m_d                 Execute the less cmd each time a new file is examined.[m
+[31m-[m
+[31m-  !_c_o_m_m_a_n_d             Execute the shell command with $SHELL.[m
+[31m-  |XX_c_o_m_m_a_n_d            Pipe file between current pos & mark XX to shell command.[m
+[31m-  v                    Edit the current file with $VISUAL or $EDITOR.[m
+[31m-  V                    Print version number of "less".[m
+[31m- ---------------------------------------------------------------------------[m
+[31m-[m
+[31m-                           OOPPTTIIOONNSS[m
+[31m-[m
+[31m-        Most options may be changed either on the command line,[m
+[31m-        or from within less by using the - or -- command.[m
+[31m-        Options may be given in one of two forms: either a single[m
+[31m-        character preceded by a -, or a name preceded by --.[m
+[31m-[m
+[31m-  -?  ........  --help[m
+[31m-                  Display help (from command line).[m
+[31m-  -a  ........  --search-skip-screen[m
+[31m-                  Search skips current screen.[m
+[31m-  -A  ........  --SEARCH-SKIP-SCREEN[m
+[31m-                  Search starts just after target line.[m
+[31m-  -b [_N]  ....  --buffers=[_N][m
+[31m-                  Number of buffers.[m
+[31m-  -B  ........  --auto-buffers[m
+[31m-                  Don't automatically allocate buffers for pipes.[m
+[31m-  -c  ........  --clear-screen[m
+[31m-                  Repaint by clearing rather than scrolling.[m
+[31m-  -d  ........  --dumb[m
+[31m-                  Dumb terminal.[m
+[31m-  -D [_x_n_._n]  .  --color=_x_n_._n[m
+[31m-                  Set screen colors. (MS-DOS only)[m
+[31m-  -e  -E  ....  --quit-at-eof  --QUIT-AT-EOF[m
+[31m-                  Quit at end of file.[m
+[31m-  -f  ........  --force[m
+[31m-                  Force open non-regular files.[m
+[31m-  -F  ........  --quit-if-one-screen[m
+[31m-                  Quit if entire file fits on first screen.[m
+[31m-  -g  ........  --hilite-search[m
+[31m-                  Highlight only last match for searches.[m
+[31m-  -G  ........  --HILITE-SEARCH[m
+[31m-                  Don't highlight any matches for searches.[m
+[31m-  -h [_N]  ....  --max-back-scroll=[_N][m
+[31m-                  Backward scroll limit.[m
+[31m-  -i  ........  --ignore-case[m
+[31m-                  Ignore case in searches that do not contain uppercase.[m
+[31m-  -I  ........  --IGNORE-CASE[m
+[31m-                  Ignore case in all searches.[m
+[31m-  -j [_N]  ....  --jump-target=[_N][m
+[31m-                  Screen position of target lines.[m
+[31m-  -J  ........  --status-column[m
+[31m-                  Display a status column at left edge of screen.[m
+[31m-  -k [_f_i_l_e]  .  --lesskey-file=[_f_i_l_e][m
+[31m-                  Use a lesskey file.[m
+[31m-  -K            --quit-on-intr[m
+[31m-                  Exit less in response to ctrl-C.[m
+[31m-  -L  ........  --no-lessopen[m
+[31m-                  Ignore the LESSOPEN environment variable.[m
+[31m-  -m  -M  ....  --long-prompt  --LONG-PROMPT[m
+[31m-                  Set prompt style.[m
+[31m-  -n  -N  ....  --line-numbers  --LINE-NUMBERS[m
+[31m-                  Don't use line numbers.[m
+[31m-  -o [_f_i_l_e]  .  --log-file=[_f_i_l_e][m
+[31m-                  Copy to log file (standard input only).[m
+[31m-  -O [_f_i_l_e]  .  --LOG-FILE=[_f_i_l_e][m
+[31m-                  Copy to log file (unconditionally overwrite).[m
+[31m-  -p [_p_a_t_t_e_r_n]  --pattern=[_p_a_t_t_e_r_n][m
+[31m-                  Start at pattern (from command line).[m
+[31m-  -P [_p_r_o_m_p_t]   --prompt=[_p_r_o_m_p_t][m
+[31m-                  Define new prompt.[m
+[31m-  -q  -Q  ....  --quiet  --QUIET  --silent --SILENT[m
+[31m-                  Quiet the terminal bell.[m
+[31m-  -r  -R  ....  --raw-control-chars  --RAW-CONTROL-CHARS[m
+[31m-                  Output "raw" control characters.[m
+[31m-  -s  ........  --squeeze-blank-lines[m
+[31m-                  Squeeze multiple blank lines.[m
+[31m-  -S  ........  --chop-long-lines[m
+[31m-                  Chop (truncate) long lines rather than wrapping.[m
+[31m-  -t [_t_a_g]  ..  --tag=[_t_a_g][m
+[31m-                  Find a tag.[m
+[31m-  -T [_t_a_g_s_f_i_l_e] --tag-file=[_t_a_g_s_f_i_l_e][m
+[31m-                  Use an alternate tags file.[m
+[31m-  -u  -U  ....  --underline-special  --UNDERLINE-SPECIAL[m
+[31m-                  Change handling of backspaces.[m
+[31m-  -V  ........  --version[m
+[31m-                  Display the version number of "less".[m
+[31m-  -w  ........  --hilite-unread[m
+[31m-                  Highlight first new line after forward-screen.[m
+[31m-  -W  ........  --HILITE-UNREAD[m
+[31m-                  Highlight first new line after any forward movement.[m
+[31m-  -x [_N[,...]]  --tabs=[_N[,...]][m
+[31m-                  Set tab stops.[m
+[31m-  -X  ........  --no-init[m
+[31m-                  Don't use termcap init/deinit strings.[m
+[31m-  -y [_N]  ....  --max-forw-scroll=[_N][m
+[31m-                  Forward scroll limit.[m
+[31m-  -z [_N]  ....  --window=[_N][m
+[31m-                  Set size of window.[m
+[31m-  -" [_c[_c]]  .  --quotes=[_c[_c]][m
+[31m-                  Set shell quote characters.[m
+[31m-  -~  ........  --tilde[m
+[31m-                  Don't display tildes after end of file.[m
+[31m-  -# [_N]  ....  --shift=[_N][m
+[31m-                  Horizontal scroll amount (0 = one half screen width)[m
+[31m-      ........  --no-keypad[m
+[31m-                  Don't send termcap keypad init/deinit strings.[m
+[31m-      ........  --follow-name[m
+[31m-                  The F command changes files if the input file is renamed.[m
+[31m-      ........  --use-backslash[m
+[31m-                  Subsequent options use backslash as escape char.[m
+[31m-[m
+[31m-[m
+[31m- ---------------------------------------------------------------------------[m
+[31m-[m
+[31m-                          LLIINNEE EEDDIITTIINNGG[m
+[31m-[m
+[31m-        These keys can be used to edit text being entered [m
+[31m-        on the "command line" at the bottom of the screen.[m
+[31m-[m
+[31m- RightArrow ..................... ESC-l ... Move cursor right one character.[m
+[31m- LeftArrow ...................... ESC-h ... Move cursor left one character.[m
+[31m- ctrl-RightArrow  ESC-RightArrow  ESC-w ... Move cursor right one word.[m
+[31m- ctrl-LeftArrow   ESC-LeftArrow   ESC-b ... Move cursor left one word.[m
+[31m- HOME ........................... ESC-0 ... Move cursor to start of line.[m
+[31m- END ............................ ESC-$ ... Move cursor to end of line.[m
+[31m- BACKSPACE ................................ Delete char to left of cursor.[m
+[31m- DELETE ......................... ESC-x ... Delete char under cursor.[m
+[31m- ctrl-BACKSPACE   ESC-BACKSPACE ........... Delete word to left of cursor.[m
+[31m- ctrl-DELETE .... ESC-DELETE .... ESC-X ... Delete word under cursor.[m
+[31m- ctrl-U ......... ESC (MS-DOS only) ....... Delete entire line.[m
+[31m- UpArrow ........................ ESC-k ... Retrieve previous command line.[m
+[31m- DownArrow ...................... ESC-j ... Retrieve next command line.[m
+[31m- TAB ...................................... Complete filename & cycle.[m
+[31m- SHIFT-TAB ...................... ESC-TAB   Complete filename & reverse cycle.[m
+[31m- ctrl-L ................................... Complete filename, list all.[m
+[31m-[m
+[31m-[m

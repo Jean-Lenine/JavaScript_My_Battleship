@@ -84,6 +84,7 @@
                     // le jeu n'est pas terminé on recommence un tour de jeu
                     this.currentPhase = this.phaseOrder[this.playerTurnPhaseIndex];
                 }
+                break;
             case this.PHASE_INIT_PLAYER:
                 utils.info("Placez vos bateaux");
                 break;
@@ -196,6 +197,7 @@
                 // si on est dans la phase de jeu (du joueur humain)
                 } else if (this.getPhase() === this.PHASE_PLAY_PLAYER) {
                     this.players[0].play(utils.eq(e.target), utils.eq(e.target.parentNode));
+                    this.renderMap();
                 }
             }
         },
@@ -220,8 +222,10 @@
             target.receiveAttack(col, line, function (hasSucceed) {
                 if (hasSucceed) {
                     msg += "Touché !";
+                    // node.style.backgroundColor = '#e60019';
                 } else {
                     msg += "Manqué...";
+                    // node.style.backgroundColor = '#aeaeae';
                 }
 
                 utils.info(msg);
@@ -242,7 +246,6 @@
         renderMap: function () {
             this.players[0].renderTries(this.grid);
         },
-
         renderMiniMap: function () {
             var minigrid = this.miniGrid;
             this.players[0].renderShips(this.players[0].fleet, minigrid);

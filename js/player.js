@@ -123,7 +123,9 @@
             grid.forEach( function (ship) {
             minigrid.innerHTML += ship.dom.outerHTML;
         });
-
+        },
+        randomPos: function(){
+            return Math.floor(Math.random() * 10);
         },
 
         setGame:function(game){

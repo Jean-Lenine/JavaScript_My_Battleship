@@ -17,21 +17,47 @@
                 });
             }, 2000);
         },
-        isShipsOk: function (callback) {
+        isShipOk: function (callback) {
+            // var j; // Présent dans le code de base
+
             var i = 0;
-            var j;
+            while(i < 4){
+                var axe = this.randomAxe(); // Utilise la méthode plus bas qui choisis l'axe de manière random
+                var y = this.randomPos(); // Défini une position Y random
+                var x = this.randomPos(); // Défini une position X random
 
-            this.fleet[i].forEach(function (ship, i) {
-                j = 0;
-                while (j < ship.life) {
-                    this.grid[i][j] = ship.getId();
-                    j += 1;
+                // Permet de placer le bateau avec la méthode setActiveShipPosition & de passer au suivant
+                if(this.game.axe === "Horizontale" && this.setActiveShipPosition(y,x, axe) 
+                || this.game.axe === "Verticale" && this.setActiveShipPosition(y,x, axe)) 
+                {
+                    // Cherche s'il y a encore des bateaux à placer
+                    this.activateNextShip();
+                    i += 1;
                 }
-            }, this);
 
+            }
+            // Code de base de areShipsOk
+            // this.fleet[i].forEach(function (ship, i) {
+            //     j = 0;
+            //     while (j < ship.life) {
+            //         this.grid[i][j] = ship.getId();
+            //         j += 1;
+            //     }
+            // }, this);
             setTimeout(function () {
                 callback();
             }, 500);
+            console.table(this.grid);
+        },
+        randomAxe: function() {
+            // Défini un axe random pour le placement des bateaux de l'ordinateur
+            var rand = Math.random() * 10;
+            if(rand > 4) {
+                this.game.axe = 'Horizontale';
+            } 
+            else {
+                this.game.axe = 'Verticale';
+            }
         }
     });
 
