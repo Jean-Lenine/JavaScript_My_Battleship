@@ -12,8 +12,18 @@
         play: function () {
             var self = this;
             setTimeout(function () {
-                self.game.fire(this, 0, 0, function (hasSucced) {
-                    self.tries[0][0] = hasSucced;
+                var x = self.randomPos();
+                var y = self.randomPos();
+                self.game.fire(this, x, y, function (hasSucced) {
+                    self.tries[y][x] = hasSucced;
+                    if(hasSucced){
+                        document.querySelector('.mini-grid').children[y].children[x].style.backgroundColor = '#e60019';                        
+                    }
+                    // if(!hasSucced){
+                    //     document.querySelector('.mini-grid').children[y].children[x].style.backgroundColor = '#aeaeae';                        
+                    // }
+                    // console.log(a, b);
+                    // console.table(self.tries);
                 });
             }, 2000);
         },

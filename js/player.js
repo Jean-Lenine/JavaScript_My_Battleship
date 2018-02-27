@@ -29,21 +29,30 @@
                 this.tries[line][col] = hasSucced;
             }, this));
         },
-        // quand il est attaqué le joueur doit dire si il a un bateaux ou non à l'emplacement choisi par l'adversaire
+        // quand il est attaqué le joueur doit dire si il a un bateaux ou non à l"emplacement choisi par l"adversaire
         receiveAttack: function (col, line, callback) {
             var succeed = false;
+            var hit = false;
 
-            if (this.grid[line][col] !== 0) {
-                succeed = true;
-                this.grid[line][col] = 0;
+            if(this.grid[line][col] === "HIT" || this.grid[line][col] === "MISS"){
+            hit = true;
             }
-            callback.call(undefined, succeed);
+
+            if (this.grid[line][col] !== 0 && this.grid[line][col] !== "MISS" ) {
+                succeed = true;
+                this.grid[line][col] = "HIT";
+            }
+            else if (this.grid[line][col] == 0){
+                this.grid[line][col] = "MISS";
+            }
+
+            callback.call(undefined, succeed, hit);
         },
         setActiveShipPosition: function (x, y, axe) {
             var ship = this.fleet[this.activeShip];
             var axe = this.game.axe;
             
-            var i = 0; 
+            var i = 0;
             var j = 0; // j récupère la vie du bateau & check si la case est pleine            
             var h = 0; // h récupère la vie du bateau & check si la case est pleine
             
@@ -108,12 +117,13 @@
         renderTries: function (grid) {
             this.tries.forEach(function (row, rid) {
                 row.forEach(function (val, col) {
-                    var node = grid.querySelector('.row:nth-child(' + (rid + 1) + ') .cell:nth-child(' + (col + 1) + ')');
+                    var node = grid.querySelector(".row:nth-child(" + (rid + 1) + ") .cell:nth-child(" + (col + 1) + ")");
 
                     if (val === true) {
-                        node.style.backgroundColor = '#e60019';
-                    } else if (val === false) {
-                        node.style.backgroundColor = '#aeaeae';
+                        node.style.backgroundColor = "#e60019";
+                    } 
+                    else if (val === false) {
+                        node.style.backgroundColor = "#aeaeae";
                     }
                 });
             });

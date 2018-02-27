@@ -102,6 +102,7 @@
             case this.PHASE_PLAY_OPPONENT:
                 utils.info("A votre adversaire de jouer...");
                 this.players[1].play();
+                this.currentPhase = this.PHASE_INIT_OPPONENT;
                 break;
             }
 
@@ -219,20 +220,24 @@
 
             // on demande à l'attaqué si il a un bateaux à la position visée
             // le résultat devra être passé en paramètre à la fonction de callback (3e paramètre)
-            target.receiveAttack(col, line, function (hasSucceed) {
+            target.receiveAttack(col, line, function (hasSucceed, hit) {
+
                 if (hasSucceed) {
                     msg += "Touché !";
-                    // node.style.backgroundColor = '#e60019';
-                } else {
+                    msg += "<br>";
+                } 
+                else {
                     msg += "Manqué...";
-                    // node.style.backgroundColor = '#aeaeae';
+                }
+                if(hit === true && self.currentPhase === self.PHASE_PLAY_PLAYER){
+                    msg += "Euh Capitaine, on a deja tirer ici nan ?";
                 }
 
                 utils.info(msg);
 
                 // on invoque la fonction callback (4e paramètre passé à la méthode fire)
                 // pour transmettre à l'attaquant le résultat de l'attaque
-                callback(hasSucceed);
+                callback(hasSucceed , hit);
 
                 // on fait une petite pause avant de continuer...
                 // histoire de laisser le temps au joueur de lire les message affiché
