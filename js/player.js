@@ -41,16 +41,12 @@
             if (this.grid[line][col] !== 0 && this.grid[line][col] !== "MISS" ) {
                 succeed = true;
                 this.grid[line][col] = "HIT";
-                var soundhit = new Audio("sound/hit.ogg");
-                soundhit.play();
             }
             else if (this.grid[line][col] == 0){
                 this.grid[line][col] = "MISS";
-                var soundmiss = new Audio("sound/miss.ogg");
-                soundmiss.play();
             }
             console.log(self.player.fleet[0]);
-
+            
             callback.call(undefined, succeed, hit);
         },
         setActiveShipPosition: function (x, y, axe) {
@@ -68,7 +64,7 @@
                     if(this.grid[y][x + j] != 0){
                         return false;
                     }
-                j += 1;
+                    j += 1;
                 }
                 while (i < ship.getLife()) {
                     this.grid[y][x + i] = ship.getId();
@@ -79,7 +75,7 @@
             }
             else {
                 // décale le curseur pour revenir au début du ship
-                y = y - Math.floor(ship.getLife()/2);
+                y = y - Math.floor(ship.getLife()/2);InkTears
                 while(h < ship.getLife()) {
                     if(typeof(this.grid[y+h]) === "undefined") {
                         return false;
@@ -100,61 +96,62 @@
         },
         clearPreview: function () {
             this.fleet.forEach(function (ship) {var soundhit = new Audio("sound/hit.ogg");
-                if (ship.dom.parentNode) {
-                    ship.dom.parentNode.removeChild(ship.dom);
+            if (ship.dom.parentNode) {
+                ship.dom.parentNode.removeChild(ship.dom);
+            }
+        });
+    },
+    resetShipPlacement: function (){
+        this.clearPreview();
+        
+        this.activeShip = 0;
+        this.grid = utils.createGrid(10, 10);
+    },
+    activateNextShip: function () {
+        if (this.activeShip < this.fleet.length - 1) {
+            this.activeShip += 1;
+            return true;
+        } else {
+            return false;
+        }
+    },
+    renderTries: function (grid) {
+        this.tries.forEach(function (row, rid) {
+            row.forEach(function (val, col) {
+                var node = grid.querySelector(".row:nth-child(" + (rid + 1) + ") .cell:nth-child(" + (col + 1) + ")");
+                
+                if (val === true) {
+                    
+                    node.style.backgroundColor = "#e60019";
+                    var soundhit = new Audio("sound/hit.ogg");
+                    soundhit.play();
+                    node.classList.add("hit");
+                } 
+                else if (val === false) {
+                    node.style.backgroundColor = "#aeaeae";
+                    var soundmiss = new Audio("sound/miss.ogg");
+                    soundmiss.play();
+                    node.classList.add("miss");
                 }
             });
-        },
-        resetShipPlacement: function (){
-            this.clearPreview();
-
-            this.activeShip = 0;
-            this.grid = utils.createGrid(10, 10);
-        },
-        activateNextShip: function () {
-            if (this.activeShip < this.fleet.length - 1) {
-                this.activeShip += 1;
-                return true;
-            } else {
-                return false;
-            }
-        },
-        renderTries: function (grid) {
-            this.tries.forEach(function (row, rid) {
-                row.forEach(function (val, col) {
-                    var node = grid.querySelector(".row:nth-child(" + (rid + 1) + ") .cell:nth-child(" + (col + 1) + ")");
-                    
-                    if (val === true) {
-                        
-                        node.style.backgroundColor = "#e60019";
-                        
-                        node.classList.add("hit");
-                    } 
-                    else if (val === false) {
-                        
-                        node.style.backgroundColor = "#aeaeae";
-                        
-                        node.classList.add("miss");
-                    }
-                });
-            });
-        },
-
-        renderShips: function (grid, minigrid) {
-            grid.forEach( function (ship) {
+        });
+    },
+    
+    renderShips: function (grid, minigrid) {
+        grid.forEach( function (ship) {
             minigrid.innerHTML += ship.dom.outerHTML;
         });
-        },
-        randomPos: function(){
-            return Math.floor(Math.random() * 10);
-        },
+    },
+    randomPos: function(){
+        return Math.floor(Math.random() * 10);
+    },
+    
+    setGame:function(game){
+        this.game = game;
+    },
+    
+};
 
-        setGame:function(game){
-            this.game = game;
-        },
-
-    };
-
-    global.player = player;
+global.player = player;
 
 }(this));
