@@ -138,3 +138,24 @@ font-family: "Roboto";
     opacity: 0.1;
 }
 
+.hit {
+    /* width: 60px;
+    height: 60px; */
+    background: url('../img/hit.png') left;
+    animation: play 1s steps(8);
+    /* z-index: 100 !important; */
+  }
+  @keyframes play {
+      100% { background-position: -1000px; }
+  }
+
+  .miss {
+    width: 60px;
+    height: 60px;
+    background: url('../img/water.png');
+    animation: plays 1s steps(5);
+    /* z-index: 100 !important; */
+  }
+  @keyframes plays {
+      100% { background-position: -2000px; }
+  }

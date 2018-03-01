@@ -108,7 +108,7 @@
 
         },
         gameIsOver: function () {
-            return false;
+            this.grid.style.opacity = "0.8";
         },
         getPhase: function () {
             if (this.waiting) {
@@ -228,9 +228,48 @@
                 } 
                 else {
                     msg += "Manqué...";
+                    msg += "<br>";
                 }
                 if(hit === true && self.currentPhase === self.PHASE_PLAY_PLAYER){
                     msg += "Euh Capitaine, on a deja tirer ici nan ?";
+                }
+                
+
+                var myGrid = self.players[0].grid;
+                
+                var battleship_HP = [];
+                var destroyer_HP = [];
+                var submarine_HP = [];
+                var small_ship_HP = [];
+                
+                var battleship_img = document.querySelector('.fleet .battleship');
+                var destroyer_img = document.querySelector('.fleet .destroyer');
+                var submarine_img = document.querySelector('.fleet .submarine');
+                var small_ship_img = document.querySelector('.fleet .small-ship');
+                                
+                myGrid.forEach(x => { if(x.includes(1)) { battleship_HP.push(x) } });
+                myGrid.forEach(x => { if(x.includes(2)) { destroyer_HP.push(x) } });
+                myGrid.forEach(x => { if(x.includes(3)) { submarine_HP.push(x) } });
+                myGrid.forEach(x => { if(x.includes(4)) { small_ship_HP.push(x) } });
+                
+                if(battleship_HP.length === 0 
+                && battleship_img.classList.contains("sunk") === false){
+                    battleship_img.classList.add("sunk");
+                }
+                if(destroyer_HP.length === 0 
+                && destroyer_img.classList.contains("sunk") === false){
+                    destroyer_img.classList.add("sunk");
+                }
+                if(submarine_HP.length === 0 
+                && submarine_img.classList.contains("sunk") === false){
+                    submarine_img.classList.add("sunk");
+                }
+                if(small_ship_HP.length === 0 
+                && small_ship_img.classList.contains("sunk") === false){
+                    small_ship_img.classList.add("sunk");
+                }
+                if(battleship_HP.length === 0  && destroyer_HP.length === 0 && submarine_HP.length === 0 && small_ship_HP.length === 0){
+                    this.currentPhase = this.PHASE_GAME_OVER;
                 }
 
                 utils.info(msg);

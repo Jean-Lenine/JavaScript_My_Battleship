@@ -17,14 +17,14 @@
                 self.game.fire(this, x, y, function (hasSucced) {
                     self.tries[y][x] = hasSucced;
                     if(hasSucced){
-                        document.querySelector('.mini-grid').children[y].children[x].style.backgroundColor = '#e60019';                        
+                        document.querySelector('.mini-grid').children[y].children[x].style.backgroundColor = '#e60019';      
                     }
                     // if(!hasSucced){
                     //     document.querySelector('.mini-grid').children[y].children[x].style.backgroundColor = '#aeaeae';                        
                     // }
                     // console.log(a, b);
                     // console.table(self.tries);
-                });
+                }); 
             }, 2000);
         },
         isShipOk: function (callback) {
