@@ -75,7 +75,7 @@
             }
             else {
                 // décale le curseur pour revenir au début du ship
-                y = y - Math.floor(ship.getLife()/2);InkTears
+                y = y - Math.floor(ship.getLife()/2);
                 while(h < ship.getLife()) {
                     if(typeof(this.grid[y+h]) === "undefined") {
                         return false;
